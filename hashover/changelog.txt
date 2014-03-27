@@ -1,4 +1,4 @@
-Changes by Jacob Barkdull 2013-08-29
+Changes by Jacob Barkdull 2014-03-25
 -------------------------------------------------------------------------------
 Official mark of version 1.0!
 
