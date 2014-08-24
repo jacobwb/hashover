@@ -50,6 +50,4 @@ http://tildehash.com/?page=hashover
 
 <b>Contributing:</b>
 ---
-Code contributions ("Pull Requests") to/of this branch will be rejected.
-
-Please clone, and commit changes to the following branch instead: https://github.com/jacobwb/hashover-next
+Code contributions ("Pull Requests") to/of this branch will be rejected. Please clone, and commit changes to the following branch instead: https://github.com/jacobwb/hashover-next
