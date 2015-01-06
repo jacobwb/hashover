@@ -19,7 +19,7 @@ http://tildehash.com/?page=hashover
 <table cellpadding="2" cellspacing="2" width="100%">
 	<tbody>
 		<tr>
-			<td width="38%">
+			<td>
 				<ul>
 					<li>Restricted use of HTML tags</li>
 					<li>Display externally hosted images</li>
@@ -30,7 +30,7 @@ http://tildehash.com/?page=hashover
 					<li>Notification emails</li>
 				</ul>
 			</td>
-			<td width="33%">
+			<td>
 				<ul>
 					<li>Threaded replies</li>
 					<li>Avatar icons</li>
@@ -41,7 +41,7 @@ http://tildehash.com/?page=hashover
 					<li>Comment layout templates</li>
 				</ul>
 			</td>
-			<td valign="top" width="28%">
+			<td valign="top" width="25%">
 				<ul>
 					<li>Administration</li>
 					<li>Automatic URL links</li>
