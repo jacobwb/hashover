@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -28,7 +28,7 @@
 	$sites_on	= 'yes';
 	$passwd_on	= 'yes';
 
-	if ($page_title = 'yes') {
+	if ($page_title == 'yes') {
 		$js_title = '<script type="text/javascript">if (document.title != "") { document.write(" on \"" + document.title + "\"") };</script>';
 		$js_title = (isset($_GET['pagetitle'])) ? ' on "' . $_GET['pagetitle'] . '"' : $js_title;
 	}

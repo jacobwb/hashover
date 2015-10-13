@@ -51,8 +51,12 @@
 		}
 	}
 
-	// ini_set('display_errors', '1');
-	ini_set('default_charset', 'UTF-8');
+	// Use UTF-8 character set
+	ini_set ('default_charset', 'UTF-8');
+
+	// Enable display of PHP errors
+	//ini_set ('display_errors', true);
+	//error_reporting (E_ALL);
 
 	// Script execution starting time
 	$exec_time = explode(' ', microtime());
@@ -227,8 +231,6 @@
 			exit(jsAddSlashes('<b>HashOver - Error:</b> file "php-mode.php" could not be included!', 'single'));
 		}
 	} else {
-		header('Content-Type: text/javascript');
-
 		if (!include('./scripts/javascript-mode.php')) {
 			exit(jsAddSlashes('<b>HashOver - Error:</b> file "javascript-mode.php" could not be included!', 'single'));
 		}

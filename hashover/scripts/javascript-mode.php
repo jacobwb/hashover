@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -22,8 +22,18 @@
 		exit(file_get_contents(basename(__FILE__)));
 	}
 
+	// Tell browser output is JavaScript
+	header ('Content-Type: application/javascript');
+
+	// Disable browser cache
+	header ('Expires: Wed, 08 May 1991 12:00:00 GMT');
+	header ('Last-Modified: ' . gmdate ('D, d M Y H:i:s') . ' GMT');
+	header ('Cache-Control: no-store, no-cache, must-revalidate');
+	header ('Cache-Control: post-check=0, pre-check=0', false);
+	header ('Pragma: no-cache');
+
 ?>
-// Copyright (C) 2014 Jacob Barkdull
+// Copyright (C) 2014-2015 Jacob Barkdull
 //
 //	This program is free software: you can redistribute it and/or modify
 //	it under the terms of the GNU Affero General Public License as
@@ -370,7 +380,7 @@ function sort_comments(method) {
 }
 <?php
 
-	if ($page_title = 'yes') {
+	if ($page_title == 'yes') {
 		$js_title = "'+pagetitle+'";
 		$js_title = (isset($_GET['pagetitle'])) ? ' on "' . $_GET['pagetitle'] . '"' : $js_title;
 	}

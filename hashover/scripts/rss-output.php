@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -100,7 +100,7 @@
 
 				$rss_feed .= "\t\t\t" . '<avatar>' . $rss_avatar . '</avatar>' . PHP_EOL;
 				$rss_feed .= "\t\t\t" . '<likes>' . $rss_cmt['likes'] . '</likes>' . PHP_EOL;
-				$rss_feed .= "\t\t\t" . '<pubDate>' . date('D, d M Y H:i:s O', (string)$rss_cmt->date) . '</pubDate>' . PHP_EOL;
+				$rss_feed .= "\t\t\t" . '<pubDate>' . date('D, d M Y H:i:s O', strtotime(str_replace(' - ', ' ', $rss_cmt->date))) . '</pubDate>' . PHP_EOL;
 				$rss_feed .= "\t\t\t" . '<guid>' . $_GET['rss'] . '#' . $permalink . '</guid>' . PHP_EOL;
 				$rss_feed .= "\t\t\t" . '<link>' . $_GET['rss'] . '#' . $permalink . '</link>' . PHP_EOL;
 				$rss_feed .= "\t\t" . '</item>' . PHP_EOL;

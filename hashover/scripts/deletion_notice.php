@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -26,16 +26,21 @@
 	function deletion_notice($file, $variable, $check) {
 		global $dir, $variable, $show_cmt, $array_count, $indention, $icon_fmt, $root_dir, $mode, $text, $subfile_count, $total_count, $cmt_count, $icons, $icon_size;
 
+		// Extensionless file basename
+		$file_basename = basename($file, '.xml');
+
 		// Check whether to generate output
 		if (!empty($check) and $check == 'yes' or $check == 'true') {
 			// Generate permalink
-			$del_permatext = (end(explode('-', basename($file, '.xml'))));
+			$del_permatext_parts = explode('-', $file_basename);
+			$del_permatext = end($del_permatext_parts);
 
-			if (preg_match('/-/', basename($file, '.xml'))) {
-				$del_permalink = 'c' . str_replace('-', 'r', basename($file, '.xml'));
-				$del_permalink = basename($del_permalink, end(explode('r', $del_permalink))) . (end(explode('r', $del_permalink)));
+			if (preg_match('/-/', $file_basename)) {
+				$del_permalink = 'c' . str_replace('-', 'r', $file_basename);
+				$del_permalink_parts = explode('r', $del_permalink);
+				$del_permalink = basename($del_permalink, end($del_permalink_parts)) . end($del_permalink_parts);
 			} else {
-				$del_permalink = 'c' . (basename($file, '.xml'));
+				$del_permalink = 'c' . $file_basename;
 			}
 
 			// Calculate CSS padding for reply indention
@@ -57,7 +62,7 @@
 				$variable["$array_count"]['indent'] = (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px');
 				$variable["$array_count"]['deletion_notice'] = '<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">' . PHP_EOL . '<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>' . PHP_EOL . '</div>' . PHP_EOL;
 				$array_count++;
-				if (preg_match('/-/', basename($file, '.xml'))) $total_count++;
+				if (preg_match('/-/', $file_basename)) $total_count++;
 			} else {
 				$show_cmt .= "\t" . '{' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'permalink: \'' . $del_permalink . '\',' . PHP_EOL;
@@ -65,13 +70,14 @@
 				$show_cmt .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px') . '\',' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'deletion_notice: \'<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">\n<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>\n</div>\n\'' . PHP_EOL;
 				$show_cmt .= "\t" . '},' . PHP_EOL . PHP_EOL;
-				if (preg_match('/-/', basename($file, '.xml'))) $total_count++;
+				if (preg_match('/-/', $file_basename)) $total_count++;
 			}
 		}
 
 		// Count deleted comment
-		if (preg_match('/-/', basename($file, '.xml'))) {
-			$thread = $dir . '/' . basename($file, '-' . end(explode('-', basename($file)))) . '.xml';
+		if (preg_match('/-/', $file_basename)) {
+			$thread_parts = explode('-', basename($file));
+			$thread = $dir . '/' . basename($file, '-' . end($thread_parts)) . '.xml';
 			$subfile_count["$thread"]++;
 		} else {
 			$total_count++;

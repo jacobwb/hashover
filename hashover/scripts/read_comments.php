@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -64,7 +64,8 @@
 
 			// Count comment
 			if (preg_match('/-/', basename($file, '.xml'))) {
-				$thread = $dir . '/' . basename($file, '-' . end(explode('-', basename($file)))) . '.xml';
+				$thread_parts = explode('-', basename($file));
+				$thread = $dir . '/' . basename($file, '-' . end($thread_parts)) . '.xml';
 				$subfile_count["$thread"] = (isset($subfile_count["$thread"])) ? $subfile_count["$thread"] + 1 : 1;
 			}
 

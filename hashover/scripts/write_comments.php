@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 
 	// Clean up name, set name cookie
 	if (isset($_POST['name']) and trim($_POST['name'], ' ') != '' and $_POST['name'] != $text['nickname']) {
-		$name = substr(ucwords(strtolower(str_replace($search, $replace, $_POST['name']))), 0, 30);
+		$name = substr(str_replace($search, $replace, $_POST['name']), 0, 30);
 
 		if (isset($_POST['edit'])) {
 			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password)) {
@@ -186,9 +186,9 @@
 			// Open comment template; prepare data
 			$write_cmt = simplexml_load_file('template.xml');
 			$write_cmt->name = xml_sanitize(trim($name, ' '));
-			$write_cmt->passwd = (isset($_POST['password']) and !empty($_POST['password']) and $_POST['password'] != $text['password']) ? md5(encrypt(stripslashes($_POST['password']))) : '';
-			$write_cmt->email = (isset($_POST['email']) and $_POST['email'] != $text['email']) ? str_replace('"', '&quot;', encrypt(stripslashes(xml_sanitize($email)))) : '';
-			$write_cmt->website = (isset($website)) ? xml_sanitize(trim($website, ' ')) : '';
+			$write_cmt->passwd = (!empty($_POST['password']) and !empty($_POST['password']) and $_POST['password'] != $text['password']) ? md5(encrypt(stripslashes($_POST['password']))) : '';
+			$write_cmt->email = (!empty($email) and $email != $text['email']) ? str_replace('"', '&quot;', encrypt(stripslashes(xml_sanitize($email)))) : '';
+			$write_cmt->website = (!empty($website)) ? xml_sanitize(trim($website, ' ')) : '';
 			$write_cmt->date = date('m/d/Y - g:ia');
 			$write_cmt['likes'] = '0';
 			$write_cmt['notifications'] = 'yes';

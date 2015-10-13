@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -30,7 +30,8 @@
 
 		// Generate permalink
 		$permalink = 'c' . str_replace('-', 'r', basename($file, '.xml'));
-		$permatext = end(explode('-', basename($file, '.xml')));
+		$file_parts = explode('-', basename($file, '.xml'));
+		$permatext = end($file_parts);
 
 		// Calculate CSS padding for reply indention
 		if (($dashes = substr_count(basename($file), '-')) != '0' and $check == 'yes') {
@@ -46,6 +47,31 @@
 
 				$name_at = (preg_match('/^@.*?$/', $read_cmt->name)) ? '@' : '';
 				$name_class = (preg_match('/^@.*?$/', $read_cmt->name)) ? ' at' : '';
+				$user_login = false;
+				$admin_login = false;
+
+				// "Like" cookie
+				$like_cookie = md5($_SERVER['SERVER_NAME'] . $ref_path . '/' . basename($file, '.xml'));
+
+				if (!empty ($_COOKIE['name'])) {
+					$admin_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']));
+
+					if (!empty($_COOKIE[$admin_cookie])) {
+						if ($_COOKIE[$admin_cookie] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password)))) {
+							$admin_login = true;
+						}
+					}
+				}
+
+				if (!empty($read_cmt->name) and !empty($read_cmt->passwd)) {
+					$edit_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $read_cmt->name));
+
+					if (!empty($_COOKIE[$edit_cookie])) {
+						if ($_COOKIE[$edit_cookie] == hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) {
+							$user_login = true;
+						}
+					}
+				}
 
 				if (empty($read_cmt->website)) {
 					if (preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $read_cmt->name)) {
@@ -103,16 +129,8 @@
 					$avatar_icon = '<a href="#' . $permalink . '" title="Permalink">#' . $permatext . '</a>';
 				}
 
-				// "Edit" and "Like" cookies
-				$edit_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $read_cmt->name));
-				$like_cookie = md5($_SERVER['SERVER_NAME'] . $ref_path . '/' . basename($file, '.xml'));
-
 				// Setup "Like" link
-				if (!isset($_COOKIE[$like_cookie])) {
-					$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
-					$like_title = $text['like_cmt'];
-					$like_class = 'like';
-				} else {
+				if (!empty($_COOKIE[$like_cookie])) {
 					if ($_COOKIE[$like_cookie] == 'liked') {
 						$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
 						$like_title = $text['liked_cmt'];
@@ -122,11 +140,15 @@
 						$like_title = $text['like_cmt'];
 						$like_class = 'like';
 					}
+				} else {
+					$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
+					$like_title = $text['like_cmt'];
+					$like_class = 'like';
 				}
 
 				// Define "Reply" link with appropriate tooltip
 				if (!empty($read_cmt->email) and $read_cmt['notifications'] == 'yes') {
-					if (isset($_COOKIE['email']) and encrypt($_COOKIE['email']) == $read_cmt->email) {
+					if (!empty($_COOKIE['email']) and encrypt($_COOKIE['email']) == $read_cmt->email) {
 						$email_indicator = $text['op_cmt_note'] . '" class="no-email"';
 					} else{
 						$email_indicator = $read_cmt->name . ' ' . $text['subbed_note'] . '" class="has-email"';
@@ -170,17 +192,15 @@
 					$variable["$array_count"]['notifications'] = $read_cmt['notifications'];
 
 					// Define "Like" link for everyone except original poster
-					if (!isset($_COOKIE[$edit_cookie]) or $_COOKIE[$edit_cookie] != hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) {
-						if (!isset($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
+					if ($user_login == false) {
+						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
 							$variable["$array_count"]['like_link'] = '<a href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>';
 						}
 					}
 
 					// Define "Edit" link if proper login cookie set
-					if ((isset($_COOKIE[$edit_cookie]) and $_COOKIE[$edit_cookie] == hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) or (isset($_COOKIE['name']) && isset($_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))]) and $_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password))))) {
-						if (!empty($read_cmt->passwd) or $_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password)))) {
-							$variable["$array_count"]['edit_link'] = '<a href="?hashover_edit=' . $permalink . '#' . $permalink . '" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>';
-						}
+					if ($user_login == true or $admin_login == true) {
+						$variable["$array_count"]['edit_link'] = '<a href="?hashover_edit=' . $permalink . '#' . $permalink . '" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>';
 					}
 
 					$variable["$array_count"]['reply_link'] = '<a href="?hashover_reply=' . $permalink . '#' . $permalink . '" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>';
@@ -202,15 +222,15 @@
 					$variable .= "\t\t" . 'sort_likes: \'' . $read_cmt['likes'] . '\',' . PHP_EOL;
 
 					// Define "Like" link for everyone except original poster
-					if (!isset($_COOKIE[$edit_cookie]) or $_COOKIE[$edit_cookie] != hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) {
-						if (!isset($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
+					if ($user_login == false) {
+						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
 							$variable .= "\t\t" . 'like_link: \'' . addcslashes('<a href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>', "'") . '\',' . PHP_EOL;
 						}
 					}
 
 					// Define "Edit" link if proper login cookie set
-					if ((isset($_COOKIE[$edit_cookie]) and $_COOKIE[$edit_cookie] == hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) or (isset($_COOKIE['name']) && isset($_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))]) and $_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password))))) {
-						$variable .= "\t\t" . 'edit_link: \'' . ((!empty($read_cmt->passwd) or $_COOKIE['hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']))] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password)))) ? addcslashes('<a href="#" onClick="editcmt(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\', \'' . (($read_cmt['notifications'] != 'no') ? '1' : '0') . '\'); return false;" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>', "'") : '') . '\',' . PHP_EOL;
+					if ($user_login == true or $admin_login == true) {
+						$variable .= "\t\t" . 'edit_link: \'' . addcslashes('<a href="#" onClick="editcmt(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\', \'' . (($read_cmt['notifications'] != 'no') ? '1' : '0') . '\'); return false;" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>', "'") . '\',' . PHP_EOL;
 					}
 
 					$variable .= "\t\t" . 'reply_link: \'' . addcslashes('<a href="#" onClick="reply(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); return false;" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>', "'") . '\',' . PHP_EOL;

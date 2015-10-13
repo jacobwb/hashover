@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2015 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -47,8 +47,15 @@
 			}
 		}
 	} else {
-		$page_url = (!isset($canon_url) or empty($canon_url)) ? 'http://' . $domain . $_SERVER['REQUEST_URI'] : $canon_url;
-		$page_url .= (isset($_GET['hashover_reply'])) ? '?hashover_reply=' . $_GET['hashover_reply'] : ((isset($_GET['hashover_edit'])) ? '?hashover_edit=' . $_GET['hashover_edit'] : '');
+		if (empty($canon_url)) {
+			$page_url = 'http://' . $domain . $_SERVER['REQUEST_URI'];
+		} else {
+			$page_url = $canon_url;
+
+			if (!empty($_GET['hashover_reply']) or !empty($_GET['hashover_edit'])) {
+				$page_url .= (!empty($_GET['hashover_reply'])) ? '?hashover_reply=' . $_GET['hashover_reply'] : '?hashover_edit=' . $_GET['hashover_edit'];
+			}
+		}
 	}
 
 	// Set URL to "count_link" query value
@@ -72,7 +79,9 @@
 
 	for ($q = 0; $q <= (count($ref_queries) - 1); $q++) {
 		if (!in_array($ref_queries[$q], $ignore_queries) and !empty($ref_queries[$q])) {
-			if (!in_array(basename($ref_queries[$q], '=' . end(explode('=', $ref_queries[$q]))), $ignore_queries)) {
+			$ref_parts = explode('=', $ref_queries[$q]);
+
+			if (!in_array(basename($ref_queries[$q], '=' . end($ref_parts)), $ignore_queries)) {
 				$parse_url['query'] .= ($q > 0 and !empty($parse_url['query'])) ? '&' . $ref_queries[$q] : $ref_queries[$q];
 			}
 		}
