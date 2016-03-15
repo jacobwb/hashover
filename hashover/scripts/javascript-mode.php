@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -103,16 +103,11 @@ function reply(r, f) {
 	<table width="100%" cellpadding="0" cellspacing="0" align="center">\n\
 	<tbody>\n<tr>\n';
 
+<?php if ($icons == 'yes') { ?>
 	if (name_on == 'yes') {
-		reply_form += '<td width="1%" rowspan="2">\n<?php
-		if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-			echo '<img align="left" width="34" height="34" src="' . $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">';
-		} else {
-			echo '<img align="left" width="34" height="34" src="';
-			echo (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=34&r=pg">' : $root_dir . 'images/avatar.png">';
-		}
-		?>\n</td>\n';
+		reply_form += '<td width="1%" rowspan="2">\n<?php echo $avatar_image; ?>\n</td>\n';
 	}
+<?php }?>
 
 	if (name_on == 'yes') {
 		reply_form += '<td align="right">\n<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : $text['nickname']; ?>" maxlength="30" class="opt-name" onFocus="this.value=(this.value == \'<?php echo $text['nickname']; ?>\') ? \'\' : this.value;" onBlur="this.value=(this.value == \'\') ? \'<?php echo $text['nickname']; ?>\' : this.value;">\n</td>\n';
@@ -164,16 +159,11 @@ function editcmt(e, f, s) {
 	<span class="options"><hr style="clear: both;">\n\
 	<table width="100%" cellpadding="0" cellspacing="0" align="center">\n\
 	<tbody>\n<tr>\n\
+<?php if ($icons == 'yes') { ?>
 	<td width="1%" rowspan="2">\n\
-	<?php
-		if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-			echo '<img align="left" width="34" height="34" src="' . $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">';
-		} else {
-			echo '<img align="left" width="34" height="34" src="';
-			echo (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=34&r=pg">' : $root_dir . 'images/avatar.png">';
-		}
-		?>\n\
+	<?php echo $avatar_image; ?>\n\
 	</td>\n\
+<?php } ?>
 	<td align="right">\n\
 	<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="' + document.getElementById('opt-name-' + e).innerHTML.replace(/<.*?>(.*?)<.*?>/gi, '$1') + '" maxlength="30" class="opt-name" onFocus="this.value=(this.value == \'<?php echo $text['nickname']; ?>\') ? \'\' : this.value;" onBlur="this.value=(this.value == \'\') ? \'<?php echo $text['nickname']; ?>\' : this.value;">\n\
 	</td>\n\
@@ -313,10 +303,19 @@ function parse_template(object, sort, method) {
 
 <?php
 		// Load HTML template
-		$html_template = explode(PHP_EOL, file_get_contents('html-templates/' . $template . '.html'));
+		$html_template = file_get_contents('html-templates/' . $template . '.html');
 
-		for ($line = 0; $line != count($html_template) - 1; $line++) {
-			echo "\t\t" . 'show_cmt += \'' . $html_template[$line] . '\n\';' . PHP_EOL;
+		// Convert HTML template line endings to system style
+		$newline_search = array("\r\n", "\r", "\n");
+		$newline_replace = array("\n", "\n", PHP_EOL);
+		$html_template = str_replace($newline_search, $newline_replace, $html_template);
+
+		// Break HTML template into individual lines
+		$template_lines = explode(PHP_EOL, $html_template);
+
+		// Echo each line as JavaScript variable addition
+		for ($line = 0, $line_length = count($template_lines); $line < $line_length; $line++) {
+			echo "\t\t" . 'show_cmt += \'' . $template_lines[$line] . '\n\';' . PHP_EOL;
 		}
 ?>
 	} else {
@@ -399,17 +398,15 @@ function sort_comments(method) {
 	}
 
 	echo jsAddSlashes('<form id="comment_form" name="comment_form" action="/hashover.php" method="post">\n');
-	echo jsAddSlashes('<span class="cmtnumber">');
 
-	if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-		echo "\t" . jsAddSlashes('<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $script = $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">');
+	if ($icons == 'yes') {
+		echo jsAddSlashes('<span class="cmtnumber">' . $avatar_image . '</span>\n');
 	} else {
-		echo "\t" . jsAddSlashes('<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $script = (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=' . $icon_size . '&r=pg">\n' : $root_dir . 'images/avatar.png">');
+		echo jsAddSlashes('<span class="cmtnumber"><a href="#comments">#' . $total_count . '</a></span>\n');
 	}
 
-	echo jsAddSlashes('</span>\n');
 	echo jsAddSlashes('<div class="cmtbox" align="center">\n');
-	echo jsAddSlashes('<table width="100%" cellpadding="0" cellspacing="0">\n<tbody>\n<tr>\n');
+	echo jsAddSlashes('<table width="100%" cellpadding="0" cellspacing="0">\n<tbody>\n<tr>\n'), PHP_EOL;
 
 	// Display name input tag if told to
 	echo "if (name_on == 'yes') {\n";

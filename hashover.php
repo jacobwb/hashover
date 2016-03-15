@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -69,10 +69,8 @@
 		if (!isset($mode) or $mode == 'javascript') {
 			if ($type != 'single') {
 				return 'show_cmt += \'' . str_replace(array('\\\n', '\\\r', '\\\\n', "\'+", "+\'", "\t"), array('\n', '\r', '\\n', "'+", "+'", ''), addcslashes($script, "'")) . '\';' . PHP_EOL;
-				break;
 			} else {
 				return 'document.write("' . str_replace(array('\\\n', '\\\r', '\"+', '+\"'), array('\n', '\r', '"+', '+"'), addslashes($script)) . '");' . PHP_EOL;
-				break;
 			}
 		} else {
 			return str_replace(array('\n', '\r'), '', $script) . PHP_EOL;
@@ -122,6 +120,22 @@
 				exit(jsAddSlashes('<b>HashOver:</b> You are blocked!', 'single'));
 			}
 		}
+	}
+
+	// Get use avatar URL by hash
+	function get_user_avatar ($hash) {
+		global $root_dir, $domain;
+
+		// Default avatar URL
+		$default_avatar = $root_dir . 'images/avatar.png';
+
+		// Use Gravatar if e-mail cookie exists
+		if (!empty($hash)) {
+			return 'http://gravatar.com/avatar/' . $hash . '.png?d=http://' . $domain . $default_avatar . '&amp;s=45&amp;r=pg';
+		}
+
+		// Use default avatar
+		return $default_avatar;
 	}
 
 	// Default scripts to be included
@@ -225,6 +239,10 @@
 
 	read_comments($dir, 'yes'); // Run read_comments function
 	krsort($top_likes); // Sort popular comments
+
+	// Construct avatar image tag
+	$user_avatar = get_user_avatar((!empty($_COOKIE['email'])) ? md5(strtolower(trim($_COOKIE['email']))) : '');
+	$avatar_image = '<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $user_avatar . '">';
 
 	if ($mode == 'php') {
 		if (!include('./scripts/php-mode.php')) {

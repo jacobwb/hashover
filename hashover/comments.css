@@ -502,7 +502,8 @@
 }
 
 #hashover .cmtdiv.reply .cmtnumber img,
-#hashover .cmtdiv.reply .cmtnumber a {
+#hashover .cmtdiv.reply .cmtnumber a,
+#hashover .cmtdiv form img {
 	width: 35px;
 	height: 35px;
 	line-height: 35px;

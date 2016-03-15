@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -108,22 +108,7 @@
 
 				// Get avatar icons
 				if ($icons == 'yes') {
-					if (preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $read_cmt->name)) {
-						$avatar = $root_dir . 'scripts/avatars.php?username=' . $read_cmt->name . '&email=' . md5(strtolower(trim(encrypt($read_cmt->email))));
-					} else {
-						if (preg_match('/([twitter.com|identi.ca]\/[a-zA-Z0-9_@]{1,29}$)/i', $read_cmt->website)) {
-							$web_username = (preg_match('/twitter.com/i', $read_cmt->website)) ? preg_replace('/(.*?twitter\.com)\/([a-zA-Z0-9_]{1,20}$)/i', '\\2', $read_cmt->website) : preg_replace('/(.*?identi\.ca)\/([a-zA-Z0-9_]{1,20}$)/i', '\\2', $read_cmt->website) . '@identica';
-							$avatar = $root_dir . 'scripts/avatars.php?username=@' . $web_username . '&email=' . md5(strtolower(trim(encrypt($read_cmt->email))));
-						} else {
-							// Get user's Gravatar icon from gravatar.com
-							if (!empty($read_cmt->email)) {
-								$avatar = 'http://gravatar.com/avatar/' . md5(strtolower(trim(encrypt($read_cmt->email)))) . '.png?d=http://' . $domain . $root_dir . 'images/avatar.png&amp;s=' . $icon_size . '&amp;r=pg';
-							} else {
-								$avatar = $root_dir . 'images/avatar.png';
-							}
-						}
-					}
-
+					$avatar = get_user_avatar((!empty($read_cmt->email)) ? md5(strtolower(trim(encrypt($read_cmt->email)))) : '');
 					$avatar_icon = '<img width="' . $icon_size . '" height="' . $icon_size . '" src="' . $avatar . '" alt="#' . $permatext . '" style="vertical-align: top;">';
 				} else {
 					$avatar_icon = '<a href="#' . $permalink . '" title="Permalink">#' . $permatext . '</a>';

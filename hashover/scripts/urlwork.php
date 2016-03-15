@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -34,11 +34,25 @@
 	// Get full page URL or Canonical URL
 	if ($mode == 'javascript') {
 		if (isset($_SERVER['HTTP_REFERER']) and !isset($_GET['rss'])) {
+			$url_parts = parse_url($_SERVER['HTTP_REFERER']);
+			$url_host = '';
+
+			// Construct host URL
+			if (!empty($url_parts['host'])) {
+				$url_host .= $url_parts['host'];
+
+				// Add optional port to URL
+				if (!empty($url_parts['port'])) {
+					$url_host .= ':' . $url_parts['port'];
+				}
+			}
+
 			// Check if the script was requested by this server
-			if (!preg_match('/' . $domain . '/i', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST))) {
+			if (!preg_match('/' . $domain . '/i', $url_host)) {
 				exit(jsAddSlashes('<b>HashOver - Error:</b> External use not allowed.', 'single'));
 			}
-			$page_url = (!isset($canon_url) or empty($canon_url)) ? $_SERVER['HTTP_REFERER'] : $canon_url;
+
+			$page_url = (empty($canon_url)) ? $_SERVER['HTTP_REFERER'] : $canon_url;
 		} else {
 			if (!isset($_GET['rss'])) {
 				exit(jsAddSlashes('<b>HashOver - Error:</b> No way to get page URL, HTTP referrer not set.', 'single'));
@@ -65,9 +79,29 @@
 		}
 	}
 
+	// Characters that aren't allowed in directory names
+	$reserved_characters = array(
+		'<',
+		'>',
+		':',
+		'"',
+		'/',
+		'\\',
+		'|',
+		'?',
+		'&',
+		'!',
+		'*',
+		'.',
+		'=',
+		'_',
+		'+',
+		' '
+	);
+
 	// Clean URL for comment thread directory name
 	$parse_url = parse_url($page_url); // Turn page URL into array
-	$ref_path  = ($parse_url['path'] == '/') ? 'index' : str_replace(array('/', '.', '='), '-', substr($parse_url['path'], 1));
+	$ref_path  = ($parse_url['path'] == '/') ? 'index' : str_replace($reserved_characters, '-', substr($parse_url['path'], 1));
 	$ref_queries = (isset($parse_url['query'])) ? explode('&', $parse_url['query']) : array();
 	$ignore_queries = array('hashover_reply', 'hashover_edit');
 	$parse_url['query'] = '';
@@ -88,7 +122,7 @@
 	}
 
 	if (!empty($parse_url['query'])) {
-		$ref_path .= '-' . str_replace(array('/', '.', '='), '-', $parse_url['query']);
+		$ref_path .= '-' . str_replace($reserved_characters, '-', $parse_url['query']);
 	}
 
 	// Page comments directory

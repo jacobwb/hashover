@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -30,7 +30,7 @@
 	}
 
 	// Read directory contents if conditions met
-	if (file_exists($dir) and (isset($_GET['rss']) and !empty($_GET['rss']))) {
+	if (file_exists($dir) and !empty($_GET['rss'])) {
 		$files = array();
 		$ac = 0;
 
@@ -57,16 +57,10 @@
 			static $rss_feed = '';
 
 			// Set feed title
-			if (isset($_GET['title']) and !empty($_GET['title'])) {
+			if (!empty($_GET['title'])) {
 				$title = $_GET['title'];
 			} else {
-				preg_match('/<title>(.+)<\/title>/', file_get_contents($_GET['rss']), $matches);
-
-				if (!empty($matches[1])) {
-					header('Location: .' . $_SERVER['PHP_SELF'] . '?rss=' . $_GET['rss'] . '&title=' . $matches[1]);
-				} else {
-					$title = str_replace('www.', '', $domain) . ': ' . basename($dir);
-				}
+				$title = str_replace('www.', '', $domain) . ': ' . basename($dir);
 			}
 
 			// Error handling
@@ -81,22 +75,8 @@
 				$rss_feed .= "\t\t\t" . '<nickname>' . str_replace('@identica', '', htmlspecialchars(strip_tags(html_entity_decode($rss_cmt->name)))) . '</nickname>' . PHP_EOL;
 				$rss_feed .= "\t\t\t" . '<description>' . str_replace(array('\n', '\r'), '', htmlspecialchars(strip_tags($rss_cmt->body, '<br><a><b><i><u><s><blockquote><img>'))) . '</description>' . PHP_EOL;
 
-				// Added avatar URLs to feed
-				if (preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $rss_cmt->name)) {
-					$rss_avatar = 'http://' . $domain . $root_dir . 'scripts/avatars.php?username=' . $rss_cmt->name . '&amp;email=' . md5(strtolower(trim(encrypt($rss_cmt->email))));
-				} else {
-					if (preg_match('/([twitter.com|identi.ca]\/[a-zA-Z0-9_@]{1,29}$)/i', $rss_cmt->website)) {
-						$web_username = (preg_match('/twitter.com/i', $rss_cmt->website)) ? preg_replace('/(.*?twitter\.com)\/([a-zA-Z0-9_]{1,20}$)/i', '\\2', $rss_cmt->website) : preg_replace('/(.*?identi\.ca)\/([a-zA-Z0-9_]{1,20}$)/i', '\\2', $rss_cmt->website) . '@identica';
-						$rss_avatar = 'http://' . $domain . $root_dir . 'scripts/avatars.php?username=@' . $web_username . '&amp;email=' . md5(strtolower(trim(encrypt($rss_cmt->email))));
-					} else {
-						// Get user's Gravatar icon from gravatar.com
-						if (!empty($rss_cmt->email)) {
-							$rss_avatar = 'http://gravatar.com/avatar/' . md5(strtolower(trim(encrypt($rss_cmt->email)))) . '.png?d=http://' . $domain . $root_dir . 'images/avatar.png&amp;s=' . $icon_size . '&amp;r=pg';
-						} else {
-							$rss_avatar = 'http://' . $domain . $root_dir . 'images/avatar.png';
-						}
-					}
-				}
+				// Add avatar URLs to feed
+				$rss_avatar = get_user_avatar((!empty($rss_cmt->email)) ? md5(strtolower(trim(encrypt($rss_cmt->email)))) : '');
 
 				$rss_feed .= "\t\t\t" . '<avatar>' . $rss_avatar . '</avatar>' . PHP_EOL;
 				$rss_feed .= "\t\t\t" . '<likes>' . $rss_cmt['likes'] . '</likes>' . PHP_EOL;

@@ -1,3 +1,21 @@
+Changes by Jacob Barkdull 2016-03-15
+--------------------------------------------------------------------------------
+One for the Wingdings, version 1.0.2!
+
+* Support for HTML templates in different file line ending styles.
+* Now taking port numbers into account for referer checking.
+* More forbidden characters will now be removed from comment directory names.
+* Disabling avatars now removes avatars from reply and edit forms as well.
+* Minor performance improvements.
+* Minor bug fixes.
+
+* Removed `avatars.php`
+
+	- Both the "temporarily" disabled Identi.ca and Twitter avatar support
+	  has been removed. For performance reasons the `avatars.php` file has
+	  also been removed entirely to avoid unnecessary HTTP redirects.
+
+
 Changes by Jacob Barkdull 2015-10-13
 --------------------------------------------------------------------------------
 The release that should not have happened, version 1.0.1!

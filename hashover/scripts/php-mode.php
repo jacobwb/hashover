@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2016 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -47,13 +47,11 @@
 ?>
 
 	<form name="comment_form" action="/hashover.php" method="post">
-		<span class="cmtnumber"><?php
-			if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-				echo '<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $script = $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">';
-			} else {
-				echo '<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $script = (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=' . $icon_size . '&r=pg">' : $root_dir . 'images/avatar.png">';
-			}
-		?></span>
+<?php if ($icons == 'yes') { ?>
+		<span class="cmtnumber"><?php echo $avatar_image; ?></span>
+<?php } else { ?>
+		<span class="cmtnumber"><a href="#comments">#<?php echo $total_count; ?></a></span>
+<?php } ?>
 
 		<div class="cmtbox" align="center">
 			<table width="100%" cellpadding="0" cellspacing="0">
@@ -129,10 +127,21 @@
 	echo "\t\t" . '</div>' . PHP_EOL;
 	echo "\t" . '</form><br>' . PHP_EOL . PHP_EOL;
 
-	function parse_template($comments, $count) {
-		global $notifications, $top_cmts, $template_replace, $template, $permalink, $ref_queries;
+	// Load HTML template
+	$html_template = file_get_contents('html-templates/' . $template . '.html');
 
-		for ($array = 0; $array != count($comments) and $array != $count; $array++) {
+	// Convert HTML template line endings to system style
+	$newline_search = array("\r\n", "\r", "\n");
+	$newline_replace = array("\n", "\n", PHP_EOL);
+	$html_template = str_replace($newline_search, $newline_replace, $html_template);
+
+	// Indent HTML template
+	$html_template = str_replace(PHP_EOL, PHP_EOL . "\t", trim($html_template, "\n"));
+
+	function parse_template($comments, $count) {
+		global $notifications, $top_cmts, $template_replace, $template, $permalink, $ref_queries, $html_template;
+
+		for ($array = 0, $comments_length = count($comments); $array != $comments_length and $array != $count; $array++) {
 			if (!isset($comments["$array"]['deletion_notice'])) {
 				$template_replace = array(
 					'indent' => $comments["$array"]['indent'],
@@ -154,13 +163,11 @@
 					$template_replace['cmtopts_style'] = ' style="display: none;"';
 				}
 
-				// Load HTML template
-				$html_template = str_replace(PHP_EOL, PHP_EOL . "\t", trim(file_get_contents('html-templates/' . $template . '.html'), "\n"));
 				$notifications = $comments["$array"]['notifications'];
 
 				// Comment information into template; add reply or edit form
 				echo "\t" . preg_replace_callback('/\\\' \+ (.*?) \+ \\\'/', function($arr) {
-					global $notifications, $template_replace, $ref_queries, $ref_path, $root_dir, $domain, $name_on, $passwd_on, $is_mobile, $email_on, $sites_on, $text, $parse_url;
+					global $notifications, $template_replace, $ref_queries, $ref_path, $root_dir, $domain, $name_on, $passwd_on, $is_mobile, $email_on, $sites_on, $text, $parse_url, $icons, $avatar_image;
 
 					if ($arr[1] != 'form') {
 						return (isset($template_replace["$arr[1]"])) ? $template_replace["$arr[1]"] : '';
@@ -176,17 +183,10 @@
 							$return_form .= "\t" . '<table width="100%" cellpadding="0" cellspacing="0" align="center">' . PHP_EOL;
 							$return_form .= "\t\t" . '<tbody>' . PHP_EOL . "\t\t\t" . '<tr>' . PHP_EOL;
 
-							if ($name_on == 'yes') {
+							if ($icons == 'yes' and $name_on == 'yes') {
 								$return_form .= "\t\t\t\t" . '<td width="1%" rowspan="2">' . PHP_EOL;
-
-								if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-									$return_form .= "\t\t\t\t\t" . '<img align="left" width="34" height="34" src="' . $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">';
-								} else {
-									$return_form .= "\t\t\t\t\t" . '<img align="left" width="34" height="34" src="';
-									$return_form .= (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=34&r=pg">' : $root_dir . 'images/avatar.png">';
-								}
-
-								$return_form .= PHP_EOL . "\t\t\t\t" . '</td>' . PHP_EOL;
+								$return_form .= "\t\t\t\t\t" . $avatar_image . PHP_EOL;
+								$return_form .= "\t\t\t\t" . '</td>' . PHP_EOL;
 							}
 
 							if ($name_on == 'yes') {
@@ -237,15 +237,13 @@
 								$return_form .= '<b class="cmtfont">' . $text['edit_cmt'] . '</b>' . PHP_EOL;
 								$return_form .= '<span class="options"><hr style="clear: both;">' . PHP_EOL;
 								$return_form .= "\t" . '<table width="100%" cellpadding="0" cellspacing="0" align="center">' . PHP_EOL;
-								$return_form .= "\t\t" . '<tbody>' . PHP_EOL . "\t\t\t" . '<tr>' . PHP_EOL . "\t\t\t\t" . '<td width="1%" rowspan="2">' . PHP_EOL;
+								$return_form .= "\t\t" . '<tbody>' . PHP_EOL . "\t\t\t" . '<tr>' . PHP_EOL;
 
-								if (isset($_COOKIE['name']) and preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $_COOKIE['name'])) {
-									$return_form .= "\t\t\t\t\t" . '<img align="left" width="34" height="34" src="' . $root_dir . 'scripts/avatars.php?username=' . $_COOKIE['name'] . '&email=' . md5(strtolower(trim($_COOKIE['email']))) . '">';
-								} else {
-									$return_form .= "\t\t\t\t\t" . '<img align="left" width="34" height="34" src="';
-									$return_form .= (isset($_COOKIE['email'])) ? 'http://gravatar.com/avatar/' . md5(strtolower(trim($_COOKIE['email']))) . '?d=http://' . $domain . $root_dir . 'images/avatar.png&s=34&r=pg">' : $root_dir . 'images/avatar.png">' . PHP_EOL;
+								if ($icons == 'yes') {
+									$return_form .= "\t\t\t\t" . '<td width="1%" rowspan="2">' . PHP_EOL;
+									$return_form .= "\t\t\t\t\t" . $avatar_image . PHP_EOL;
+									$return_form .= "\t\t\t\t" . '</td>' . PHP_EOL;
 								}
-								$return_form .= "\t\t\t\t" . '</td>' . PHP_EOL;
 
 								$return_form .= "\t\t\t\t" . '<td align="right">' . PHP_EOL;
 								$return_form .= "\t\t\t\t\t" . '<input type="text" name="name" title="' . $text['nickname_tip'] . '" class="opt-name" value="' . ((isset($_COOKIE['name'])) ? $_COOKIE['name'] : '') . '" placeholder="' . $text['nickname'] . '" maxlength="30">' . PHP_EOL;
