@@ -155,7 +155,55 @@
 			'op_cmt_note'	=> 'あなたが電子メールを介して通知されません',
 			'subbed_note'	=> '電子メールを介して通知され',
 			'unsubbed_note' => 'は、電子メール通知にサブスクライブされていない'
+		),
+
+		'fr' => array(
+			'comment_form'	=> 'Tapez votre commentaire ici (les autres champs sont optionnels)',	// "Comment" field's default text
+			'reply_form'	=> 'Tapez votre réponse ici (les autres champs sont optionnels)',	// "Reply" field's default text
+			'post_button'	=> 'Envoyez votre commentaire',				// "Post Comment" button's default text
+			'del_note'	=> 'Ce commentaire a été effacé.',		// Notice of deleted comment
+			'cmt_deleted'	=> 'Commentaire effacé!',				// Notice of successful comment deletion
+			'options'	=> 'Options',					// "Options" button text
+			'cancel'	=> 'Annuler',					// "Cancel" button text
+			'reply_to_cmt'	=> 'Répondre au commentaire',
+			'edit_your_cmt'	=> 'Editer votre commentaire',
+			'nickname_tip'	=> 'Surnom ou @nom_d_utilisateur Twitter',
+			'nickname'	=> 'Surnom ou @nom_d_utilisateur',
+			'password_tip'	=> 'Mot de passe (requis seulement pour modifier/supprimer votre commentaire plus tard)',
+			'password'	=> 'Mot de passe',
+			'email'		=> 'Adresse email',
+			'website'	=> 'Site web',
+			'logged_in'	=> 'Vous vous êtes identifié avec succès !',
+			'cmt_needed'	=> 'Vous avez échoué à entrer un commentaire acceptable. Utilisez le formulaire ci-dessous.',
+			'reply_needed'	=> 'Vous avez échoué à entrer une réponse acceptable. Utilisez le formulaire ci-dessous.',
+			'post_fail'	=> 'Echec de la soumission du commentaire ! Vous n\'avez pas les permissions suffisantes.',
+			'cmt_tip'	=> 'HTML accepté :  &lt;b&gt;, &lt;u&gt;, &lt;i&gt;, &lt;s&gt;, &lt;pre&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;, &lt;blockquote&gt;, &lt;code&gt; échappe le HTML, les URLs sont transformées en liens automatiquement, et [img]adresse de l\'image ici[/img] va afficher une image externe.',
+			'post_reply'	=> 'Envoyer la réponse',
+			'delete'	=> 'Effacer',
+			'subscribe_tip'	=> 'S\'abonner aux notifications par mail',
+			'subscribe'	=> 'S\'abonner',
+			'edit_cmt'	=> 'Editer le commentaire',
+			'save_edit'	=> 'Enregistrer la modification',
+			'no_email_warn'	=> 'Vous ne recevrez pas de notification de réponse à votre commentaire si vous ne fournissez pas d\'adresse email',
+			'delete_cmt'	=> 'Êtes-vous sûr de vouloir effacer ce commentaire ?',
+			'post_cmt'	=> 'Envoyer un commentaire',
+			'popular_cmts'	=> 'Les plus populaire',
+			'showing_cmts'	=> 'Affiché',
+			'sort'		=> 'Trié',
+			'sort_ascend'	=> 'Dans l\'ordre',
+			'sort_descend'	=> 'Dans l\'ordre inverse',
+			'sort_byname'	=> 'Par commentateur',
+			'sort_bydate'	=> 'Par date (les plurs récents en premier)',
+			'sort_bylikes'	=> 'Par popularité',
+			'thread'	=> 'Début du fil',
+			'thread_tip'	=> 'Sauter au début du fil',
+			'like_cmt'	=> '\'Aimer\' ce commentaire',
+			'liked_cmt'	=> 'Vous avez \'aimé\' ce commentaire',
+			'op_cmt_note'	=> 'Vous ne serez pas notifié par email',
+			'subbed_note'	=> 'sera notifié par email',
+			'unsubbed_note' => 'ne s`\est pas abandonner aux notifications par email'
 		)
+
 	);
 
 	// Set locale to language in settings
