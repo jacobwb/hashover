@@ -2,9 +2,16 @@
 
 	// Copyright (C) 2014 Jacob Barkdull
 	//
-	//	I, Jacob Barkdull, hereby release this work into the public domain. 
-	//	This applies worldwide. If this is not legally possible, I grant any 
-	//	entity the right to use this work for any purpose, without any 
+	//	I, Jacob Barkdull, hereby release this work into the public domain.
+	//	This applies worldwide. If this is not legally possible, I grant any
+	//	entity the right to use this work for any purpose, without any
+	//	conditions, unless such conditions are required by law.
+	//
+	// French translation by Stéphane Mourey
+	//
+	//	I, Stéphane Mourey, hereby release this work into the public domain.
+	//	This applies worldwide. If this is not legally possible, I grant any
+	//	entity the right to use this work for any purpose, without any
 	//	conditions, unless such conditions are required by law.
 
 
@@ -176,32 +183,32 @@
 			'logged_in'	=> 'Vous vous êtes identifié avec succès !',
 			'cmt_needed'	=> 'Vous avez échoué à entrer un commentaire acceptable. Utilisez le formulaire ci-dessous.',
 			'reply_needed'	=> 'Vous avez échoué à entrer une réponse acceptable. Utilisez le formulaire ci-dessous.',
-			'post_fail'	=> 'Echec de la soumission du commentaire ! Vous n\'avez pas les permissions suffisantes.',
-			'cmt_tip'	=> 'HTML accepté :  &lt;b&gt;, &lt;u&gt;, &lt;i&gt;, &lt;s&gt;, &lt;pre&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;, &lt;blockquote&gt;, &lt;code&gt; échappe le HTML, les URLs sont transformées en liens automatiquement, et [img]adresse de l\'image ici[/img] va afficher une image externe.',
+			'post_fail'	=> 'Echec de la soumission du commentaire ! Vous n&apos;avez pas les permissions suffisantes.',
+			'cmt_tip'	=> 'HTML accepté :  &lt;b&gt;, &lt;u&gt;, &lt;i&gt;, &lt;s&gt;, &lt;pre&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;, &lt;blockquote&gt;, &lt;code&gt; échappe le HTML, les URLs sont transformées en liens automatiquement, et [img]adresse de l&apos;image ici[/img] va afficher une image externe.',
 			'post_reply'	=> 'Envoyer la réponse',
 			'delete'	=> 'Effacer',
-			'subscribe_tip'	=> 'S\'abonner aux notifications par mail',
-			'subscribe'	=> 'S\'abonner',
+			'subscribe_tip'	=> 'S&apos;abonner aux notifications par mail',
+			'subscribe'	=> 'S&apos;abonner',
 			'edit_cmt'	=> 'Editer le commentaire',
 			'save_edit'	=> 'Enregistrer la modification',
-			'no_email_warn'	=> 'Vous ne recevrez pas de notification de réponse à votre commentaire si vous ne fournissez pas d\'adresse email',
+			'no_email_warn'	=> 'Vous ne recevrez pas de notification de réponse à votre commentaire si vous ne fournissez pas d&apos;adresse email',
 			'delete_cmt'	=> 'Êtes-vous sûr de vouloir effacer ce commentaire ?',
 			'post_cmt'	=> 'Envoyer un commentaire',
 			'popular_cmts'	=> 'Les plus populaire',
 			'showing_cmts'	=> 'Affiché',
 			'sort'		=> 'Trié',
-			'sort_ascend'	=> 'Dans l\'ordre',
-			'sort_descend'	=> 'Dans l\'ordre inverse',
+			'sort_ascend'	=> 'Dans l&apos;ordre',
+			'sort_descend'	=> 'Dans l&apos;ordre inverse',
 			'sort_byname'	=> 'Par commentateur',
 			'sort_bydate'	=> 'Par date (les plurs récents en premier)',
 			'sort_bylikes'	=> 'Par popularité',
 			'thread'	=> 'Début du fil',
 			'thread_tip'	=> 'Sauter au début du fil',
-			'like_cmt'	=> '\'Aimer\' ce commentaire',
-			'liked_cmt'	=> 'Vous avez \'aimé\' ce commentaire',
+			'like_cmt'	=> '&apos;Aimer&apos; ce commentaire',
+			'liked_cmt'	=> 'Vous avez &apos;aimé&apos; ce commentaire',
 			'op_cmt_note'	=> 'Vous ne serez pas notifié par email',
 			'subbed_note'	=> 'sera notifié par email',
-			'unsubbed_note' => 'ne s`\est pas abandonner aux notifications par email'
+			'unsubbed_note' => 'ne s&apos;est pas abandonner aux notifications par email'
 		)
 
 	);
