@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2017 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -32,10 +32,10 @@
 	}
 
 	// Decryption method for stored e-mails
-	function encrypt($str) {
+	function encrypt($string) {
 		global $encryption_key;
 
-		$str = str_replace(' ', '-', $str);
+		$str = $string . '';
 		$encryption_key = str_replace(chr(32), '', $encryption_key);
 		if (strlen($encryption_key) < 8) exit('<b>HashOver - Error:</b> Key error, make sure it\'s at least 8 characters long.');
 		$kl = strlen($encryption_key) < 32 ? strlen($encryption_key) : 32;
