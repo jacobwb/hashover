@@ -58,7 +58,7 @@
 
 			if ($mode == 'php') {
 				$variable["$array_count"]['permalink'] = $del_permalink;
-				$variable["$array_count"]['cmtclass'] = ((preg_match('/r/', $del_permalink)) ? 'cmtdiv reply' : 'cmtdiv');
+				$variable["$array_count"]['cmtclass'] = ((preg_match('/r/', $del_permalink)) ? 'cmtdiv reply' : 'cmtdiv') . ' deleted';
 				$variable["$array_count"]['indent'] = (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px');
 				$variable["$array_count"]['deletion_notice'] = '<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">' . PHP_EOL . '<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>' . PHP_EOL . '</div>' . PHP_EOL;
 				$array_count++;
@@ -66,7 +66,7 @@
 			} else {
 				$show_cmt .= "\t" . '{' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'permalink: \'' . $del_permalink . '\',' . PHP_EOL;
-				$show_cmt .= "\t\t" . 'cmtclass: \'' . ((preg_match('/r/', $del_permalink)) ? 'cmtdiv reply' : 'cmtdiv') . '\',' . PHP_EOL;
+				$show_cmt .= "\t\t" . 'cmtclass: \'' . ((preg_match('/r/', $del_permalink)) ? 'cmtdiv reply' : 'cmtdiv') . ' deleted' . '\',' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px') . '\',' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'deletion_notice: \'<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">\n<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>\n</div>\n\'' . PHP_EOL;
 				$show_cmt .= "\t" . '},' . PHP_EOL . PHP_EOL;
