@@ -18,6 +18,8 @@
 	$subfile_count	= array();	// Individual comment thread count
 	$cmt_count	= '1';		// Comment count excluding replies
 	$total_count	= '1';		// Comment count including replies
+	$deleted_cmt	= '0';		// Deleted comment count excluding replies
+	$deleted_total	= '0';		// Deleted comment count including replies
 	$show_cmt	= '';		// Will contain all comments
 	$deleted_files	= array();	// Deleted files
 

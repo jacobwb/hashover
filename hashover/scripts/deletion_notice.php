@@ -24,7 +24,7 @@
 
 	// Function for adding deletion notice to output
 	function deletion_notice($file, $variable, $check) {
-		global $dir, $variable, $show_cmt, $array_count, $indention, $icon_fmt, $root_dir, $mode, $text, $subfile_count, $total_count, $cmt_count, $icons, $icon_size;
+		global $dir, $variable, $show_cmt, $array_count, $indention, $icon_fmt, $root_dir, $mode, $text, $subfile_count, $total_count, $cmt_count, $deleted_cmt, $deleted_total, $icons, $icon_size;
 
 		// Extensionless file basename
 		$file_basename = basename($file, '.xml');
@@ -62,7 +62,6 @@
 				$variable["$array_count"]['indent'] = (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px');
 				$variable["$array_count"]['deletion_notice'] = '<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">' . PHP_EOL . '<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>' . PHP_EOL . '</div>' . PHP_EOL;
 				$array_count++;
-				if (preg_match('/-/', $file_basename)) $total_count++;
 			} else {
 				$show_cmt .= "\t" . '{' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'permalink: \'' . $del_permalink . '\',' . PHP_EOL;
@@ -70,7 +69,11 @@
 				$show_cmt .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $del_indent . 'px 12px 0px' : '16px 0px 12px ' . $del_indent . 'px') . '\',' . PHP_EOL;
 				$show_cmt .= "\t\t" . 'deletion_notice: \'<span class="cmtnote cmtnumber">' . $icon_fmt . '</span><div style="height: ' . $icon_size . 'px;" class="cmtbubble">\n<b class="cmtnote cmtfont">' . $text['del_note'] . '</b>\n</div>\n\'' . PHP_EOL;
 				$show_cmt .= "\t" . '},' . PHP_EOL . PHP_EOL;
-				if (preg_match('/-/', $file_basename)) $total_count++;
+			}
+
+			if (preg_match('/-/', $file_basename)) {
+				$deleted_total++;
+				$total_count++;
 			}
 		}
 
@@ -80,6 +83,9 @@
 			$thread = $dir . '/' . basename($file, '-' . end($thread_parts)) . '.xml';
 			$subfile_count["$thread"]++;
 		} else {
+			$deleted_total++;
+			$deleted_cmt++;
+
 			$total_count++;
 			$cmt_count++;
 		}

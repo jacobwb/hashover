@@ -28,6 +28,7 @@
 	$name		= 'GNU Knows Who';				// Nickname when one isn't given
 	$template	= 'default';					// Comment layout template
 	$page_title	= 'yes';					// Whether page title is shown or not
+	$count_missing	= 'yes';					// Whether comment counts should include deleted comments
 	$short_dates	= 'yes';					// Whether comment dates are shortened
 	$icons		= 'yes';					// Whether comments have avatar icons (Gravatar)
 	$icon_size	= '45';						// Size of Gravatar icons in pixels

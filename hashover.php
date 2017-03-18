@@ -185,17 +185,27 @@
 
 	// Function for displaying comment count
 	function display_count() {
-		global $cmt_count, $total_count;
-		$cmt_count--; $total_count--;
+		global $cmt_count, $total_count, $deleted_cmt, $deleted_total, $count_missing;
 
-		if ($total_count == $cmt_count) {
-			$show_count = $cmt_count . ' Comment';
-			if ($cmt_count != '1') $show_count .= 's';
+		$cmt_count--;
+		$total_count--;
+
+		$cmt_copy = $cmt_count;
+		$total_copy = $total_count;
+
+		if ($count_missing == 'no') {
+			$cmt_copy -= $deleted_cmt;
+			$total_copy -= $deleted_total;
+		}
+
+		if ($total_copy == $cmt_copy) {
+			$show_count = $cmt_copy . ' Comment';
+			if ($cmt_copy != '1') $show_count .= 's';
 		} else {
-			$show_count = $cmt_count . ' Comment';
-			if ($cmt_count != '1') $show_count .= 's';
-			$show_count .= ' (' . $total_count . ' counting repl';
-			$show_count .= ($total_count != '2') ? 'ies)' : 'y)';
+			$show_count = $cmt_copy . ' Comment';
+			if ($cmt_copy != '1') $show_count .= 's';
+			$show_count .= ' (' . $total_copy . ' counting repl';
+			$show_count .= ($total_copy != '2') ? 'ies)' : 'y)';
 		}
 
 		return $show_count;
