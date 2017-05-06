@@ -121,9 +121,18 @@
 		}
 	}
 
+	// Append URL query to path
 	if (!empty($parse_url['query'])) {
 		$ref_path .= '-' . str_replace($reserved_characters, '-', $parse_url['query']);
 	}
+
+	// Remove multiple dashes
+	if (mb_strpos($ref_path, '--') !== false) {
+		$ref_path = preg_replace('/-{2,}/', '-', $ref_path);
+	}
+
+	// Remove leading and trailing dashes
+	$ref_path = trim($ref_path, '-');
 
 	// Page comments directory
 	if ($ref_path != 'hashover-php') {
