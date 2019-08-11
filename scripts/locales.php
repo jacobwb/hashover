@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2016 Jacob Barkdull, Stéphane Mourey
+	// Copyright (C) 2014-2019 Jacob Barkdull, Stéphane Mourey
 	//
 	//	I, Jacob Barkdull, hereby release this work into the public domain.
 	//	This applies worldwide. If this is not legally possible, I grant any
@@ -14,12 +14,6 @@
 	//	entity the right to use this work for any purpose, without any
 	//	conditions, unless such conditions are required by law.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Text for forms, buttons, links, and tooltips in multiple languages
 	$locale = array(

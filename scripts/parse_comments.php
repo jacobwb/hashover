@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2016 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,12 +15,6 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Read comment files, and wrap them in HTML divs
 	$array_count = 0;
@@ -75,12 +69,12 @@
 
 				if (empty($read_cmt->website)) {
 					if (preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $read_cmt->name)) {
-						$variable_name = $name_at . '<a id="opt-website-' . $permalink . '" href="http://' . ((!preg_match('/@identica/i', $read_cmt->name)) ? 'twitter.com/' : 'identi.ca/') . str_replace(array('@identica', '@'), '', $read_cmt->name) . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
+						$variable_name = $name_at . '<a rel="nofollow" id="opt-website-' . $permalink . '" href="http://' . ((!preg_match('/@identica/i', $read_cmt->name)) ? 'twitter.com/' : 'identi.ca/') . str_replace(array('@identica', '@'), '', $read_cmt->name) . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
 					} else {
 						$variable_name = preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name));
 					}
 				} else {
-					$variable_name = $name_at . '<a id="opt-website-' . $permalink . '" href="' . $read_cmt->website . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
+					$variable_name = $name_at . '<a rel="nofollow" id="opt-website-' . $permalink . '" href="' . $read_cmt->website . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
 				}
 
 				// Format date and time
@@ -111,7 +105,7 @@
 					$avatar = get_user_avatar((!empty($read_cmt->email)) ? md5(strtolower(trim(encrypt($read_cmt->email)))) : '');
 					$avatar_icon = '<img width="' . $icon_size . '" height="' . $icon_size . '" src="' . $avatar . '" alt="#' . $permatext . '" style="vertical-align: top;">';
 				} else {
-					$avatar_icon = '<a href="#' . $permalink . '" title="Permalink">#' . $permatext . '</a>';
+					$avatar_icon = '<a rel="nofollow" href="#' . $permalink . '" title="Permalink">#' . $permatext . '</a>';
 				}
 
 				// Setup "Like" link
@@ -143,7 +137,7 @@
 				}
 
 				// Add HTML anchor tag to URLs
-				$clean_code = preg_replace('/(((ftp|http|https){1}:\/\/)[a-zA-Z0-9-@:%_\+.~#?&\/=]+)([\s]{0,})/i', '<a href="\\1" target="_blank">\\1</a>', $read_cmt->body);
+				$clean_code = preg_replace('/(((ftp|http|https){1}:\/\/)[a-zA-Z0-9-@:%_\+.~#?&\/=]+)([\s]{0,})/i', '<a rel="nofollow" href="\\1" target="_blank">\\1</a>', $read_cmt->body);
 
 				// Replace [img] tags with external image placeholder if enabled
 				$clean_code = preg_replace_callback('/\[img\]<a.*?>(((ftp|http|https){1}:\/\/)[a-zA-Z0-9-@:%_\+.~#?&\/=]+)<\/a>\[\/img\]/i', function($arr) {
@@ -152,7 +146,7 @@
 					if (in_array(pathinfo($arr[1], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))) {
 						return '<br><br><img src="' . $root_dir . 'images/place-holder.png" title="' . $arr[1] . '" alt="Loading..." onClick="((this.src==this.title) ? this.src=\'' . $root_dir . 'images/place-holder.png\' : this.src=this.title);"><br><br>';
 					} else {
-						return '<a href="' . $arr[1] . '" target="_blank">' . $arr[1] . '</a>';
+						return '<a rel="nofollow" href="' . $arr[1] . '" target="_blank">' . $arr[1] . '</a>';
 					}
 				}, $clean_code);
 
@@ -168,8 +162,8 @@
 					$variable["$array_count"]['cmtclass'] = ((preg_match('/r/', $permalink)) ? 'cmtdiv reply' : 'cmtdiv');
 					$variable["$array_count"]['indent'] = (($indention == 'right') ? '16px ' . $indent . 'px 12px 0px' : '16px 0px 12px ' . $indent . 'px');
 					$variable["$array_count"]['name'] = '<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>';
-					if (preg_match("/r/", $permalink)) $variable["$array_count"]['thread'] = '<a href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>';
-					$variable["$array_count"]['date'] = '<a href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>';
+					if (preg_match("/r/", $permalink)) $variable["$array_count"]['thread'] = '<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>';
+					$variable["$array_count"]['date'] = '<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>';
 					if ($read_cmt['likes'] > '0') $variable["$array_count"]['likes'] = $read_cmt['likes'] . ' Like' . (($read_cmt['likes'] != '1') ? 's' : '');
 					$variable["$array_count"]['sort_name'] = $read_cmt->name;
 					$variable["$array_count"]['sort_date'] = strtotime(str_replace('- ', '', $read_cmt->date));
@@ -179,16 +173,16 @@
 					// Define "Like" link for everyone except original poster
 					if ($user_login == false) {
 						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
-							$variable["$array_count"]['like_link'] = '<a href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>';
+							$variable["$array_count"]['like_link'] = '<a rel="nofollow" href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>';
 						}
 					}
 
 					// Define "Edit" link if proper login cookie set
 					if ($user_login == true or $admin_login == true) {
-						$variable["$array_count"]['edit_link'] = '<a href="?hashover_edit=' . $permalink . '#' . $permalink . '" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>';
+						$variable["$array_count"]['edit_link'] = '<a rel="nofollow" href="?hashover_edit=' . $permalink . '#' . $permalink . '" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>';
 					}
 
-					$variable["$array_count"]['reply_link'] = '<a href="?hashover_reply=' . $permalink . '#' . $permalink . '" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>';
+					$variable["$array_count"]['reply_link'] = '<a rel="nofollow" href="?hashover_reply=' . $permalink . '#' . $permalink . '" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>';
 					$variable["$array_count"]['comment'] = str_replace('\n', PHP_EOL, $clean_code);
 					$array_count++;
 				} else {
@@ -199,8 +193,8 @@
 					$variable .= "\t\t" . 'avatar: \'' . addcslashes($avatar_icon, "'") . '\',' . PHP_EOL;
 					$variable .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $indent . 'px 12px 0px' : '16px 0px 12px ' . $indent . 'px') . '\',' . PHP_EOL;
 					$variable .= "\t\t" . 'name: \'' . addcslashes('<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>', "'") . '\',' . PHP_EOL;
-					$variable .= (preg_match("/r/", $permalink)) ? "\t\t" . 'thread: \'' . addcslashes('<a href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>', "'") . '\',' . PHP_EOL : '';
-					$variable .= "\t\t" . 'date: \'' . addcslashes('<a href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>', "'") . '\',' . PHP_EOL;
+					$variable .= (preg_match("/r/", $permalink)) ? "\t\t" . 'thread: \'' . addcslashes('<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>', "'") . '\',' . PHP_EOL : '';
+					$variable .= "\t\t" . 'date: \'' . addcslashes('<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>', "'") . '\',' . PHP_EOL;
 					$variable .= ($read_cmt['likes'] > '0') ? "\t\t" . 'likes: \'' . $read_cmt['likes'] . ' Like' . (($read_cmt['likes'] != '1') ? 's' : '') . '\',' . PHP_EOL : '';
 					$variable .= "\t\t" . 'sort_name: \'' . addcslashes($read_cmt->name, "'") . '\',' . PHP_EOL;
 					$variable .= "\t\t" . 'sort_date: ' . '\'' . strtotime(str_replace('- ', '', $read_cmt->date)) . '\',' . PHP_EOL;
@@ -209,16 +203,16 @@
 					// Define "Like" link for everyone except original poster
 					if ($user_login == false) {
 						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
-							$variable .= "\t\t" . 'like_link: \'' . addcslashes('<a href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>', "'") . '\',' . PHP_EOL;
+							$variable .= "\t\t" . 'like_link: \'' . addcslashes('<a rel="nofollow" href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>', "'") . '\',' . PHP_EOL;
 						}
 					}
 
 					// Define "Edit" link if proper login cookie set
 					if ($user_login == true or $admin_login == true) {
-						$variable .= "\t\t" . 'edit_link: \'' . addcslashes('<a href="#" onClick="editcmt(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\', \'' . (($read_cmt['notifications'] != 'no') ? '1' : '0') . '\'); return false;" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>', "'") . '\',' . PHP_EOL;
+						$variable .= "\t\t" . 'edit_link: \'' . addcslashes('<a rel="nofollow" href="#" onClick="editcmt(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\', \'' . (($read_cmt['notifications'] != 'no') ? '1' : '0') . '\'); return false;" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>', "'") . '\',' . PHP_EOL;
 					}
 
-					$variable .= "\t\t" . 'reply_link: \'' . addcslashes('<a href="#" onClick="reply(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); return false;" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>', "'") . '\',' . PHP_EOL;
+					$variable .= "\t\t" . 'reply_link: \'' . addcslashes('<a rel="nofollow" href="#" onClick="reply(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); return false;" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>', "'") . '\',' . PHP_EOL;
 					$variable .= "\t\t" . 'comment: \'' . addcslashes($clean_code, "'") . '\'' . PHP_EOL;
 					$variable .= "\t" . '},' . PHP_EOL . PHP_EOL;
 				}

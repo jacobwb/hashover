@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	I, Jacob Barkdull, hereby release this work into the public domain. 
 	//	This applies worldwide. If this is not legally possible, I grant any 

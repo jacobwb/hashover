@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2015 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,12 +15,6 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Function for adding deletion notice to output
 	function deletion_notice($file, $variable, $check) {
@@ -53,7 +47,7 @@
 			if ($icons == 'yes') {
 				$icon_fmt = '<img width="' . $icon_size . '" height="' . $icon_size . '" src="' . $root_dir . 'images/delicon.png" alt="#' . $del_permatext . '" align="left">';
 			} else {
-				$icon_fmt = '<a href="#' . $del_permalink . '" title="Permalink">#' . $del_permatext . '</a>&nbsp;';
+				$icon_fmt = '<a rel="nofollow" href="#' . $del_permalink . '" title="Permalink">#' . $del_permatext . '</a>&nbsp;';
 			}
 
 			if ($mode == 'php') {

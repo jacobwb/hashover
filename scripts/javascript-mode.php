@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2016 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,12 +15,6 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Tell browser output is JavaScript
 	header ('Content-Type: application/javascript');
@@ -71,7 +65,7 @@ if (passwd_on	== undefined) { var passwd_on	=  'yes'; }
 var head = document.getElementsByTagName('head')[0];
 var links = document.getElementsByTagName('link');
 
-if (document.querySelector('link[href="/hashover/comments.css"]') == null) {
+if (document.querySelector('link[href="<?php echo $root_dir; ?>comments.css"]') == null) {
 	link = document.createElement('link');
 	link.rel = 'stylesheet';
 	link.href = '<?php echo $root_dir; ?>comments.css';
@@ -82,7 +76,7 @@ if (document.querySelector('link[href="/hashover/comments.css"]') == null) {
 // Add comment RSS feed to page header
 link = document.createElement('link');
 link.rel = 'alternate';
-link.href = '/hashover/comments.php?rss=' + location.href.replace(/#.*$/g, '') + "&title=<?php echo (isset($_GET['pagetitle'])) ? $_GET['pagetitle'] . '"' : '" + document.title'; ?>;
+link.href = '<?php echo $root_dir; ?>comments.php?rss=' + location.href.replace(/#.*$/g, '') + "&title=<?php echo (isset($_GET['pagetitle'])) ? $_GET['pagetitle'] . '"' : '" + document.title'; ?>;
 link.type = 'application/rss+xml';
 link.title = 'Comments';
 head.appendChild(link);
@@ -295,6 +289,7 @@ function parse_template(object, sort, method) {
 
 	if (!object['deletion_notice']) {
 		var 
+			root_dir = '<?php echo addcslashes($root_dir, "'"); ?>',
 			permalink = object['permalink'],
 			cmtclass = (sort == false || method == 'ascending') ? object['cmtclass'] : 'cmtdiv',
 			avatar = object['avatar'],
@@ -408,12 +403,12 @@ function sort_comments(method) {
 		echo jsAddSlashes('<br><br>\n');
 	}
 
-	echo jsAddSlashes('<form id="comment_form" name="comment_form" action="/hashover/comments.php" method="post">\n');
+	echo jsAddSlashes('<form id="comment_form" name="comment_form" action="' . $root_dir . 'comments.php" method="post">\n');
 
 	if ($icons == 'yes') {
 		echo jsAddSlashes('<span class="cmtnumber">' . $avatar_image . '</span>\n');
 	} else {
-		echo jsAddSlashes('<span class="cmtnumber"><a href="#comments">#' . $total_count . '</a></span>\n');
+		echo jsAddSlashes('<span class="cmtnumber"><a rel="nofollow" href="#comments">#' . $total_count . '</a></span>\n');
 	}
 
 	echo jsAddSlashes('<div class="cmtbox" align="center">\n');
@@ -526,7 +521,7 @@ function sort_comments(method) {
 		echo jsAddSlashes('</div>\n') . PHP_EOL;
 	} else {
 		echo jsAddSlashes('<div style="margin: 16px 0px 12px 0px;" class="cmtdiv">\n');
-		echo jsAddSlashes('<span class="cmtnumber"><img width="' . $icon_size . '" height="' . $icon_size . '" src="/hashover/images/first-comment.png"></span>\n');
+		echo jsAddSlashes('<span class="cmtnumber"><img width="' . $icon_size . '" height="' . $icon_size . '" src="' . $root_dir . 'images/first-comment.png"></span>\n');
 		echo jsAddSlashes('<div style="height: ' . $icon_size . 'px;" class="cmtbubble">\n');
 		echo jsAddSlashes('<b class="cmtnote cmtfont" style="color: #000000;">Be the first to comment!</b>\n</div>');
 	}
@@ -534,11 +529,11 @@ function sort_comments(method) {
 	echo jsAddSlashes('</div><br>\n') . PHP_EOL;
 	echo jsAddSlashes('<center>\n');
 	echo jsAddSlashes('HashOver Comments &middot;\n');
-	if (!empty($show_cmt)) echo jsAddSlashes('<a href="http://' . $domain . '/hashover/comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;\n');
-	echo jsAddSlashes('<a href="http://' . $domain . '/hashover.zip" rel="hashover-source" target="_blank">Source Code</a> &middot;\n');
-	echo jsAddSlashes('<a href="http://' . $domain . '/hashover/comments.php" rel="hashover-javascript" target="_blank">JavaScript</a> &middot;\n');
-	echo jsAddSlashes('<a href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;\n');
-	echo jsAddSlashes('<a href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>\n');
+	if (!empty($show_cmt)) echo jsAddSlashes('<a rel="nofollow" href="http://' . $domain . $root_dir . 'comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;\n');
+	echo jsAddSlashes('<a rel="nofollow" href="http://' . $domain . $root_dir . 'hashover.zip" target="_blank">Source Code</a> &middot;\n');
+	echo jsAddSlashes('<a rel="nofollow" href="http://' . $domain . $root_dir . 'comments.php" target="_blank">JavaScript</a> &middot;\n');
+	echo jsAddSlashes('<a rel="nofollow" href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;\n');
+	echo jsAddSlashes('<a rel="nofollow" href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>\n');
 	echo jsAddSlashes('</center>\n');
 
 	// Script execution ending time

@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2017 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,12 +15,6 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Encryption method for storing e-mails
 	function encrypt($string) {

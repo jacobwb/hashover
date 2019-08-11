@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	I, Jacob Barkdull, hereby release this work into the public domain. 
 	//	This applies worldwide. If this is not legally possible, I grant any 
@@ -15,12 +15,6 @@
 	//	to a new version of HashOver, it is recommended that you 
 	//	preserve this file, unless directed otherwise.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Various Settings
 	$root_dir	= '/hashover/';					// HTTP root directory for comments

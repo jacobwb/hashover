@@ -182,26 +182,26 @@
 }
 
 #hashover input.opt-name {
-	background-image: url('/hashover/images/name.png');
+	background-image: url('./images/name.png');
 }
 
 #hashover input.opt-password {
-	background-image: url('/hashover/images/password.png');
+	background-image: url('./images/password.png');
 }
 
 #hashover input.opt-login {
 	width: 36px;
-	background-image: url('/hashover/images/login.png');
+	background-image: url('./images/login.png');
 	background-position: center center;
 	cursor: pointer;
 }
 
 #hashover input.opt-email {
-	background-image: url('/hashover/images/email.png');
+	background-image: url('./images/email.png');
 }
 
 #hashover input.opt-website {
-	background-image: url('/hashover/images/website.png');
+	background-image: url('./images/website.png');
 }
 
 #hashover .cmtdiv table tbody tr td,
@@ -249,33 +249,33 @@
 }
 
 #hashover .cmtdiv .cmtopts span.cmtbuttons a.like:active {
-	background-image: url('/hashover/images/liked.png');
+	background-image: url('./images/liked.png');
 	background-color: #FFDDDB;
 }
 
 #hashover .cmtdiv .cmtopts span.cmtbuttons a.liked:active {
-	background-image: url('/hashover/images/like.png');
+	background-image: url('./images/like.png');
 	background-color: #DBDBDB;
 }
 
 #hashover a.like {
-	background-image: url('/hashover/images/like.png');
+	background-image: url('./images/like.png');
 }
 
 #hashover a.liked {
-	background-image: url('/hashover/images/liked.png');
+	background-image: url('./images/liked.png');
 }
 
 #hashover a.edit {
-	background-image: url('/hashover/images/edit.png');
+	background-image: url('./images/edit.png');
 }
 
 #hashover a.has-email {
-	background-image: url('/hashover/images/has-email.png');
+	background-image: url('./images/has-email.png');
 }
 
 #hashover a.no-email {
-	background-image: url('/hashover/images/no-email.png');
+	background-image: url('./images/no-email.png');
 }
 
 #hashover a.has-email,
@@ -519,7 +519,7 @@
 	padding-right: 19px;
 	float: left;
 	margin-right: -1px;
-	background-image: url('/hashover/images/bubble-tick.png');
+	background-image: url('./images/bubble-tick.png');
 	background-position: right center;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
@@ -527,7 +527,7 @@
 
 #hashover .cmtdiv.reply .cmtnumber {
 	padding-right: 13px;
-	background-image: url('/hashover/images/bubble-tick-reply.png');
+	background-image: url('./images/bubble-tick-reply.png');
 }
 
 #hashover .cmtdiv pre,

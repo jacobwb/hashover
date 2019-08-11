@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2016 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,12 +15,6 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-	// Display source code
-	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
-		header('Content-type: text/plain; charset=UTF-8');
-		exit(file_get_contents(basename(__FILE__)));
-	}
 
 	// Default form settings
 	$name_on	= 'yes';
@@ -46,11 +40,11 @@
 	}
 ?>
 
-	<form name="comment_form" action="/hashover/comments.php" method="post">
+	<form name="comment_form" action="<?php echo $root_dir; ?>comments.php" method="post">
 <?php if ($icons == 'yes') { ?>
 		<span class="cmtnumber"><?php echo $avatar_image; ?></span>
 <?php } else { ?>
-		<span class="cmtnumber"><a href="#comments">#<?php echo $total_count; ?></a></span>
+		<span class="cmtnumber"><a rel="nofollow" href="#comments">#<?php echo $total_count; ?></a></span>
 <?php } ?>
 
 		<div class="cmtbox" align="center">
@@ -139,11 +133,12 @@
 	$html_template = str_replace(PHP_EOL, PHP_EOL . "\t", trim($html_template, "\n"));
 
 	function parse_template($comments, $count) {
-		global $notifications, $top_cmts, $template_replace, $template, $permalink, $ref_queries, $html_template;
+		global $root_dir, $notifications, $top_cmts, $template_replace, $template, $permalink, $ref_queries, $html_template;
 
 		for ($array = 0, $comments_length = count($comments); $array != $comments_length and $array != $count; $array++) {
 			if (!isset($comments["$array"]['deletion_notice'])) {
 				$template_replace = array(
+					'root_dir' => $root_dir,
 					'indent' => $comments["$array"]['indent'],
 					'cmtclass' => $comments["$array"]['cmtclass'],
 					'permalink' => $comments["$array"]['permalink'],
@@ -176,7 +171,7 @@
 
 						if (in_array('hashover_reply=' . $template_replace['permalink'], $ref_queries)) {
 							$return_form .= PHP_EOL . '<span class="optionbuttons" style="float: right;">' . PHP_EOL;
-							$return_form .= "\t" . '<a href="' . $parse_url['path'] . ((!empty($parse_url['query'])) ? '?' . $parse_url['query'] : '') . '#' . $template_replace['permalink'] . '">' . $text['cancel'] . '</a>' . PHP_EOL;
+							$return_form .= "\t" . '<a rel="nofollow" href="' . $parse_url['path'] . ((!empty($parse_url['query'])) ? '?' . $parse_url['query'] : '') . '#' . $template_replace['permalink'] . '">' . $text['cancel'] . '</a>' . PHP_EOL;
 							$return_form .= '</span>' . PHP_EOL;
 							$return_form .= '<b class="cmtfont">' . $text['reply_to_cmt'] . '</b>' . PHP_EOL;
 							$return_form .= '<span class="options" id="options-' . $template_replace['permalink'] . '"><hr style="clear: both;">' . PHP_EOL;
@@ -232,7 +227,7 @@
 								$return_form .= "\t" . '<label for="notify" title="' . $text['subscribe_tip'] . '">' . PHP_EOL;
 								$return_form .= "\t\t" . '<input type="checkbox"' . (($notifications != 'no') ? ' checked="true"' : '') . ' id="notify" name="notify"> ' . $text['subscribe'] . PHP_EOL;
 								$return_form .= "\t" . '</label>' . PHP_EOL;
-								$return_form .= "\t" . '<a href="' . $parse_url['path'] . ((!empty($parse_url['query'])) ? '?' . $parse_url['query'] : '') . '#' . $template_replace['permalink'] . '">' . $text['cancel'] . '</a>' . PHP_EOL;
+								$return_form .= "\t" . '<a rel="nofollow" href="' . $parse_url['path'] . ((!empty($parse_url['query'])) ? '?' . $parse_url['query'] : '') . '#' . $template_replace['permalink'] . '">' . $text['cancel'] . '</a>' . PHP_EOL;
 								$return_form .= '</span>' . PHP_EOL;
 								$return_form .= '<b class="cmtfont">' . $text['edit_cmt'] . '</b>' . PHP_EOL;
 								$return_form .= '<span class="options"><hr style="clear: both;">' . PHP_EOL;
@@ -313,7 +308,7 @@
 		parse_template($show_cmt, $total_count);
 	} else {
 		echo "\t" . '<div style="margin: 16px 0px 12px 0px;" class="cmtdiv">' . PHP_EOL;
-		echo "\t\t" . '<span class="cmtnumber"><img width="' . $icon_size . '" height="' . $icon_size . '" src="/hashover/images/first-comment.png"></span>' . PHP_EOL;
+		echo "\t\t" . '<span class="cmtnumber"><img width="' . $icon_size . '" height="' . $icon_size . '" src="' . $root_dir . 'images/first-comment.png"></span>' . PHP_EOL;
 		echo "\t\t" . '<div style="height: ' . $icon_size . 'px;" class="cmtbubble">' . PHP_EOL;
 		echo "\t\t\t" . '<b class="cmtnote cmtfont" style="color: #000000;">Be the first to comment!</b>' . PHP_EOL;
 		echo "\t\t" . '</div>' . PHP_EOL;
@@ -324,10 +319,10 @@
 
 	<br><center>
 		HashOver Comments &middot;
-<?php if (!empty($show_cmt)) echo "\t\t" . '<a href="http://' . $domain . '/hashover/comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;' . PHP_EOL; ?>
-		<a href="http://<?php echo $domain; ?>/hashover.zip" rel="hashover-source" target="_blank">Source Code</a> &middot;
-		<a href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;
-		<a href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>
+<?php if (!empty($show_cmt)) echo "\t\t" . '<a rel="nofollow" href="http://' . $domain . $root_dir . 'comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;' . PHP_EOL; ?>
+		<a rel="nofollow" href="http://<?php echo $domain, $root_dir; ?>hashover.zip" target="_blank">Source Code</a> &middot;
+		<a rel="nofollow" href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;
+		<a rel="nofollow" href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>
 	</center>
 </div>
 

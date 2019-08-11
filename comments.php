@@ -1,6 +1,6 @@
 <?php
 
-	// Copyright (C) 2014-2016 Jacob Barkdull
+	// Copyright (C) 2014-2019 Jacob Barkdull
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -42,13 +42,6 @@
 	// Display source code
 	if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 		$script_query = 'true';
-
-		if (!isset($_GET['rss']) and !isset($_GET['canon_url'])) {
-			if (isset($_GET['source']) or !isset($_SERVER['HTTP_REFERER'])) {
-				header('Content-type: text/plain; charset=UTF-8');
-				exit(file_get_contents(basename(__FILE__)));
-			}
-		}
 	}
 
 	// Use UTF-8 character set
@@ -82,7 +75,7 @@
 	}
 
 	// Include settings file, error on fail
-	if (!include('./hashover/scripts/settings.php')) {
+	if (!include(__DIR__ . '/scripts/settings.php')) {
 		if (empty($notification_email) and empty($encryption_key)) {
 			exit(jsAddSlashes('<b>HashOver - Error:</b> file "settings.php" is required (with permission 0755)', 'single'));
 		}
@@ -178,7 +171,7 @@
 	if (isset($script_query)) {
 		if (isset($_GET['count_link']) and !empty($_GET['count_link'])) {
 			if (!file_exists($dir)) {
-				exit(jsAddSlashes('<a href="' . $_GET['count_link'] . '#comments">Post Comment</a>', 'single'));
+				exit(jsAddSlashes('<a rel="nofollow" href="' . $_GET['count_link'] . '#comments">Post Comment</a>', 'single'));
 			}
 		}
 	}
@@ -217,9 +210,9 @@
 			read_comments($dir, 'no'); // Run read_comments function
 
 			if ($total_count > 1) {
-				exit(jsAddSlashes('<a href="' . $_GET['count_link'] . '#comments">' . display_count() . '</a>', 'single'));
+				exit(jsAddSlashes('<a rel="nofollow" href="' . $_GET['count_link'] . '#comments">' . display_count() . '</a>', 'single'));
 			} else {
-				exit(jsAddSlashes('<a href="' . $_GET['count_link'] . '#comments">Post Comment</a>', 'single'));
+				exit(jsAddSlashes('<a rel="nofollow" href="' . $_GET['count_link'] . '#comments">Post Comment</a>', 'single'));
 			}
 		}
 	}

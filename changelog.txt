@@ -1,3 +1,27 @@
+Changes by Jacob Barkdull 2019-08-06
+--------------------------------------------------------------------------------
+... And an SEO! Version 1.0.3!
+
+* Made all hyperlinks use nofollow rel attribute.
+* Renamed "hashover.php" to "comments.php" to ease transition to version 2.0.
+* Moved all files under "hashover" to the root directory.
+* Removed remaining hardcoded "/hashover" paths.
+* Removed source code URL query.
+* Updated Copyright years.
+
+* These changes mean you need to use a new path in your script tags...
+
+    For example, change:
+
+      <script type="text/javascript" src="/hashover.php"></script>
+
+    To:
+
+      <script type="text/javascript" src="/hashover/comments.php"></script>
+
+  Everything else about how to use HashOver is the same.
+
+
 Changes by Jacob Barkdull 2016-03-15
 --------------------------------------------------------------------------------
 One for the Wingdings, version 1.0.2!
