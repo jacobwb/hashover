@@ -1,4 +1,4 @@
-HashOver 1.0.1
+HashOver 1.0.3rc4
 ========
 **HashOver** is a PHP comment system intended as a replacement for services like Disqus. HashOver is free and open source software, under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.html). HashOver adds a "comment section" to any website, by placing a few simple lines of JavaScript or PHP to the source code of any webpage. HashOver is a self-hosted system and allows completely anonymous comments to be posted, the only required information is the comment itself.
 
