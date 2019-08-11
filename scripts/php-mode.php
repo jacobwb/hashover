@@ -46,7 +46,7 @@
 	}
 ?>
 
-	<form name="comment_form" action="/hashover.php" method="post">
+	<form name="comment_form" action="/hashover/comments.php" method="post">
 <?php if ($icons == 'yes') { ?>
 		<span class="cmtnumber"><?php echo $avatar_image; ?></span>
 <?php } else { ?>
@@ -324,7 +324,7 @@
 
 	<br><center>
 		HashOver Comments &middot;
-<?php if (!empty($show_cmt)) echo "\t\t" . '<a href="http://' . $domain . '/hashover.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;' . PHP_EOL; ?>
+<?php if (!empty($show_cmt)) echo "\t\t" . '<a href="http://' . $domain . '/hashover/comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;' . PHP_EOL; ?>
 		<a href="http://<?php echo $domain; ?>/hashover.zip" rel="hashover-source" target="_blank">Source Code</a> &middot;
 		<a href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;
 		<a href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>

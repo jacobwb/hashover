@@ -80,14 +80,14 @@ Once the files have successfully been downloaded, extracted, proper permissions 
 
 ```
 <div id="hashover"></div>
-<script type="text/javascript" src="/hashover.php"></script>
+<script type="text/javascript" src="/hashover/comments.php"></script>
 <noscript>You must have JavaScript enabled to use the comments.</noscript>
 ```
 
 **PHP method**
 
 ```
-<?php $mode = 'php'; include('hashover.php'); ?> 
+<?php $mode = 'php'; include('hashover/comments.php'); ?> 
 ```
 
 **Optional**
@@ -109,7 +109,7 @@ In the file `hashover/scripts/php-mode.php` a list of variables nearly identical
 You may set the "count_link" query to display only a comment count linking to a specified page's comments. For example the following code will display "9 Comments (11 counting replies)".
 
 ```
-<script src="/hashover.php?count_link=http://tildehash.com/%3Farticle=firefoxs-inspector-tool-as-3d-modeler-seriously"></script>
+<script src="/hashover/comments.php?count_link=http://tildehash.com/%3Farticle=firefoxs-inspector-tool-as-3d-modeler-seriously"></script>
 ```
 
 Identify an HTML element as "cmtcount" `<span id="cmtcount"></span>` for example, and that element will display a comment count. This is useful in creating comment "widgets" / "buttons" that display the comment count and link to the comment section. The following code displays a link similar to the previous code:
@@ -122,14 +122,14 @@ You may defer loading the comment's JavaScript with this code:
 
 ```
 <div id="hashover"></div>
-<script type="text/javascript" src="/hashover.php" defer="defer"></script>
+<script type="text/javascript" src="/hashover/comments.php" defer="defer"></script>
 ```
 
 Or load the comment's JavaScript asynchronously:
 
 ```
 <div id="hashover"></div>
-<script type="text/javascript">(function() { var s = document.createElement('script'), t = document.getElementsByTagName('script')[0]; s.type = 'text/javascript'; s.async = true; s.src = "/hashover.php"; t.parentNode.insertBefore(s, t); })();</script>
+<script type="text/javascript">(function() { var s = document.createElement('script'), t = document.getElementsByTagName('script')[0]; s.type = 'text/javascript'; s.async = true; s.src = "/hashover/comments.php"; t.parentNode.insertBefore(s, t); })();</script>
 ```
 
 **Optional Settings**
@@ -172,7 +172,7 @@ A canonical URL uses the [canonical link element](http://en.wikipedia.org/wiki/C
 The following JavaScript will automatically use the URL in the canonical link element:
 
 ```
-<script>var canon_url = (document.querySelector('link[rel="canonical"]') != null) ? '?canon_url=' + encodeURIComponent(document.querySelector('link[rel="canonical"]').getAttribute('href')) : ''; document.write('<script src="/hashover.php' + canon_url + '"><\/script>');</script>
+<script>var canon_url = (document.querySelector('link[rel="canonical"]') != null) ? '?canon_url=' + encodeURIComponent(document.querySelector('link[rel="canonical"]').getAttribute('href')) : ''; document.write('<script src="/hashover/comments.php' + canon_url + '"><\/script>');</script>
 ```
 
 In PHP adding a `$canon_url` variable before the include function will trigger the canonical URL behavior:
@@ -181,7 +181,7 @@ In PHP adding a `$canon_url` variable before the include function will trigger t
 <?php
         $mode = 'php';
         $canon_url = 'http://example.com/page.html';
-        include('hashover.php');
+        include('hashover/comments.php');
 ?>
 ```
 

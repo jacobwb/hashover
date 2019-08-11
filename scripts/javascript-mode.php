@@ -82,7 +82,7 @@ if (document.querySelector('link[href="/hashover/comments.css"]') == null) {
 // Add comment RSS feed to page header
 link = document.createElement('link');
 link.rel = 'alternate';
-link.href = '/hashover.php?rss=' + location.href.replace(/#.*$/g, '') + "&title=<?php echo (isset($_GET['pagetitle'])) ? $_GET['pagetitle'] . '"' : '" + document.title'; ?>;
+link.href = '/hashover/comments.php?rss=' + location.href.replace(/#.*$/g, '') + "&title=<?php echo (isset($_GET['pagetitle'])) ? $_GET['pagetitle'] . '"' : '" + document.title'; ?>;
 link.type = 'application/rss+xml';
 link.title = 'Comments';
 head.appendChild(link);
@@ -408,7 +408,7 @@ function sort_comments(method) {
 		echo jsAddSlashes('<br><br>\n');
 	}
 
-	echo jsAddSlashes('<form id="comment_form" name="comment_form" action="/hashover.php" method="post">\n');
+	echo jsAddSlashes('<form id="comment_form" name="comment_form" action="/hashover/comments.php" method="post">\n');
 
 	if ($icons == 'yes') {
 		echo jsAddSlashes('<span class="cmtnumber">' . $avatar_image . '</span>\n');
@@ -534,9 +534,9 @@ function sort_comments(method) {
 	echo jsAddSlashes('</div><br>\n') . PHP_EOL;
 	echo jsAddSlashes('<center>\n');
 	echo jsAddSlashes('HashOver Comments &middot;\n');
-	if (!empty($show_cmt)) echo jsAddSlashes('<a href="http://' . $domain . '/hashover.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;\n');
+	if (!empty($show_cmt)) echo jsAddSlashes('<a href="http://' . $domain . '/hashover/comments.php?rss=' . $page_url . '" target="_blank">RSS Feed</a> &middot;\n');
 	echo jsAddSlashes('<a href="http://' . $domain . '/hashover.zip" rel="hashover-source" target="_blank">Source Code</a> &middot;\n');
-	echo jsAddSlashes('<a href="http://' . $domain . '/hashover.php" rel="hashover-javascript" target="_blank">JavaScript</a> &middot;\n');
+	echo jsAddSlashes('<a href="http://' . $domain . '/hashover/comments.php" rel="hashover-javascript" target="_blank">JavaScript</a> &middot;\n');
 	echo jsAddSlashes('<a href="http://tildehash.com/hashover/changelog.txt" target="_blank">ChangeLog</a> &middot;\n');
 	echo jsAddSlashes('<a href="http://tildehash.com/hashover/archives/" target="_blank">Archives</a><br>\n');
 	echo jsAddSlashes('</center>\n');
