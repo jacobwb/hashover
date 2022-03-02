@@ -27,13 +27,13 @@
 		$k = array();
 
 		for ($i2 = 0; $i2 < $kl; $i2++) {
-			$k[$i2] = ord($encryption_key{$i2}) & 0x1F;
+			$k[$i2] = ord($encryption_key[$i2]) & 0x1F;
 		}
 		$j = 0;
 
 		for ($i2 = 0; $i2 < strlen($str); $i2++) {
-			$e = ord($str{$i2});
-			$str{$i2} = $e & 0xE0 ? chr($e^$k[$j]) : chr($e);
+			$e = ord($str[$i2]);
+			$str[$i2] = $e & 0xE0 ? chr($e^$k[$j]) : chr($e);
 			$j++; $j = $j == $kl ? 0 : $j;
 		}
 		return $str;
